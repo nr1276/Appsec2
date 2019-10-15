@@ -19,9 +19,9 @@ class RegistrationForm(Form):
     mfa = StringField('mfa', [validators.DataRequired(), validators.Length(min=10, max=20)])
 
 class UserLoginForm(Form):
-    username = StringField('Username', [validators.DataRequired(), validators.Length(min=4, max=25)])
-    password = PasswordField('Password', [validators.DataRequired(), validators.Length(min=6, max=20)])
-    mfa = StringField('mfa', [validators.DataRequired(), validators.Length(min=10, max=20)])
+    username = StringField('Username', [validators.DataRequired()])
+    password = PasswordField('Password', [validators.DataRequired()])
+    mfa = StringField('mfa', [validators.DataRequired()])
     result = StringField('result')
 
 class SpellCheckForm(Form):
@@ -75,7 +75,7 @@ def register():
         mfa = form.mfa.data
         if username in Users:
             form.username.data = 'user already exists'
-            return render_template('register.html', form=form)
+            return reinder_template('register.html', form=form)
         Users[username] = {'password': password, 'mfa': mfa}
         return redirect('/login')
     return render_template('register.html', form=form)
@@ -99,7 +99,8 @@ def login():
        user = User()
        user.id = username
        flask_login.login_user(user)
-       return redirect('/spell_check')
+       form.result.data = "success"
+       #return redirect('/spell_check')
     return render_template('login.html', form=form)
            
 @app.route('/spell_check', methods=['GET', 'POST'])
@@ -108,6 +109,7 @@ def spell_check():
     form = SpellCheckForm(request.form)
     if request.method == 'POST':
         inputtext = form.inputtext.data
+        form.textout.data = inputtext
         with open("words.txt", "w") as fo:
             fo.write(inputtext)      
         output = (check_output(["./a.out", "words.txt", "wordlist.txt"], universal_newlines=True))
