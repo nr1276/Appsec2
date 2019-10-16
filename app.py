@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, make_response
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
 from wtforms.widgets import TextArea
 from passlib.hash import sha256_crypt
@@ -7,10 +7,15 @@ from flask_login import LoginManager, login_required, login_user, logout_user, c
 import subprocess
 from subprocess import check_output
 from flask_wtf.csrf import CSRFProtect
-
+from flask_wtf import FlaskForm
 
 #User Variable to store entries
 Users = { }
+
+
+login_manager = flask_login.LoginManager()
+csrf = CSRFProtect()
+
 
 class RegistrationForm(Form):
     username = StringField('Username', [validators.Length(min=4, max=25)])
@@ -37,11 +42,10 @@ app.config['SESSION_TYPE'] = 'memcached'
 app.config['SECRET_KEY'] = 'super secret key'
 
 #Login Manager
-login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
-
 #CSRF Protect
-csrf = CSRFProtect(app)
+
+
 
 class User(flask_login.UserMixin):
     pass
