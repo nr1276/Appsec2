@@ -6,6 +6,8 @@ import flask_login
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 import subprocess
 from subprocess import check_output
+from flask_wtf.csrf import CSRFProtect
+
 
 #User Variable to store entries
 Users = { }
@@ -37,6 +39,9 @@ app.config['SECRET_KEY'] = 'super secret key'
 #Login Manager
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
+
+#CSRF Protect
+csrf = CSRFProtect(app)
 
 class User(flask_login.UserMixin):
     pass
@@ -114,4 +119,6 @@ def spell_check():
             fo.write(inputtext)      
         output = (check_output(["./a.out", "words.txt", "wordlist.txt"], universal_newlines=True))
         form.misspelled.data = output.replace("\n", ", ").strip().strip(',')
-    return render_template('spell_check.html', form=form)
+    response = make_response(render_template('spell_check.html', form=form))
+    response.headers['Content-Security-Policy'] = "default-src 'self'"
+    return response

@@ -5,6 +5,7 @@
 		<br>
 		{% from "_formhelpers.html" import render_field %}
 		<form method=post>
+			{{ form.csrf_token }}
 			<dl>
 				{{ render_field(form.username, id="uname") }}
 				{{ render_field(form.password, id = "pword") }}
