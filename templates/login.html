@@ -7,8 +7,8 @@
 		<form method=post>
 			{{ form.csrf_token }}
 			<dl>
-				{{ render_field(form.username, id="uname") }}
-				{{ render_field(form.password, id = "pword") }}
+				{{ render_field(form.uname, id="uname") }}
+				{{ render_field(form.pword, id = "pword") }}
 				{{ render_field(form.mfa, id = "2fa") }}
 				{{ render_field(form.result, id="result") }}
 			</dl>
