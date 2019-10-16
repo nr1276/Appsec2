@@ -89,7 +89,7 @@ def register():
             return render_template('register.html', form=form)
         Users[username] = {'password': password, 'mfa': mfa}
         form.result.data = 'success'
-        return redirect('/login')
+        #return redirect('/login')
     return render_template('register.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -112,7 +112,7 @@ def login():
        user.id = username
        flask_login.login_user(user)
        form.result.data = "success"
-       return redirect('/spell_check')
+       #return redirect('/spell_check')
     return render_template('login.html', form=form)
            
 @app.route('/spell_check', methods=['GET', 'POST'])
