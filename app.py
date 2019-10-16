@@ -113,5 +113,5 @@ def spell_check():
         with open("words.txt", "w") as fo:
             fo.write(inputtext)      
         output = (check_output(["./a.out", "words.txt", "wordlist.txt"], universal_newlines=True))
-        form.misspelled.data = output.replace("\n", ",").strip().strip(',')
+        form.misspelled.data = output.replace("\n", ", ").strip().strip(',')
     return render_template('spell_check.html', form=form)
