@@ -109,7 +109,7 @@ def login():
        user.id = username
        flask_login.login_user(user)
        form.result.data = "success"
-       #return redirect('/spell_check')
+       return redirect('/spell_check')
     return render_template('login.html', form=form)
            
 @app.route('/spell_check', methods=['GET', 'POST'])
@@ -122,7 +122,6 @@ def spell_check():
         with open("words.txt", "w") as fo:
             fo.write(inputtext)      
         output = (check_output(["./a.out", "words.txt", "wordlist.txt"], universal_newlines=True))
-        print(output)
         form.misspelled.data = output.replace("\n", ", ").strip().strip(',')
     response = make_response(render_template('spell_check.html', form=form))
     response.headers['Content-Security-Policy'] = "default-src 'self'"
