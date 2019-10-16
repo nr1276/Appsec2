@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, make_response
+from flask import Flask, url_for, render_template, request, redirect, make_response
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
 from wtforms.widgets import TextArea
 from passlib.hash import sha256_crypt
@@ -66,7 +66,7 @@ def request_loader(request):
         return
     user = User()
     user.id = username
-    user.is_authenticated = sha256_crypt.verify(password, Users[username]['password'])
+    #user.is_authenticated = sha256_crypt.verify(password, Users[username]['password'])
 
 
 @app.route('/')
@@ -89,7 +89,6 @@ def register():
             return render_template('register.html', form=form)
         Users[username] = {'password': password, 'mfa': mfa}
         form.result.data = 'success'
-        #return redirect('/login')
     return render_template('register.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -107,12 +106,11 @@ def login():
            return render_template('login.html', form=form)
        if (mfa != Users[username]['mfa']):
            form.result.data = "Two-factor failure"
-           return render_template('login.html', form=form)
+           return render_template('login.html', form=form) 
        user = User()
        user.id = username
        flask_login.login_user(user)
        form.result.data = "success"
-       #return redirect('/spell_check')
     return render_template('login.html', form=form)
            
 @app.route('/spell_check', methods=['GET', 'POST'])
