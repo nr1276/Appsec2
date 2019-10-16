@@ -24,6 +24,7 @@ class RegistrationForm(Form):
             validators.length(min=6, max=20)
         ])
     mfa = StringField('mfa', [validators.DataRequired(), validators.Length(min=10, max=20)])
+    result = StringField('result')
 
 class UserLoginForm(Form):
     username = StringField('Username', [validators.DataRequired()])
@@ -84,8 +85,10 @@ def register():
         mfa = form.mfa.data
         if username in Users:
             form.username.data = 'user already exists'
-            return reinder_template('register.html', form=form)
+            form.result.data = 'failure'
+            return render_template('register.html', form=form)
         Users[username] = {'password': password, 'mfa': mfa}
+        form.result.data = 'success'
         return redirect('/login')
     return render_template('register.html', form=form)
 
