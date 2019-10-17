@@ -70,6 +70,7 @@ def request_loader(request):
 
 
 @app.route('/')
+
 @app.route('/index')
 def mainpage(user=None):
     user = user
@@ -79,6 +80,7 @@ def mainpage(user=None):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm(request.form)
+    success = None
     if request.method ==  'POST' and form.validate():
         uname = form.uname.data
         pword = sha256_crypt.encrypt(form.pword.data)
@@ -94,24 +96,25 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = UserLoginForm(request.form)
+    result = None
     if request.method == 'POST':
        uname = form.uname.data
        pword = form.pword.data
        mfa = form.mfa.data
        if (uname not in Users):
-           form.result.data = "incorrect"
-           return render_template('login.html', form=form)
+           result = "incorrect"
+           return render_template('login.html', form=form, result=result)
        if (not sha256_crypt.verify(pword, Users[uname]['password'])):
            result = "incorrect"
            return render_template('login.html', form=form, result=result)
        if (mfa != Users[uname]['mfa']):
-           form.result.data = "Two-factor failure"
-           return render_template('login.html', form=form) 
+           result = "Two-factor failure"
+           return render_template('login.html', form=form, result=result) 
        user = User()
        user.id = uname
        flask_login.login_user(user)
-       form.result.data = "success"
-    return render_template('login.html', form=form)
+       result = "success"
+    return render_template('login.html', form=form, result=result)
            
 @app.route('/spell_check', methods=['GET', 'POST'])
 @login_required
