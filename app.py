@@ -119,6 +119,8 @@ def login():
 @login_required
 def spell_check():
     form = SpellCheckForm(request.form)
+    textout = None
+    misspelled = None
     if request.method == 'POST':
         inputtext = form.inputtext.data
         textout = inputtext
@@ -126,6 +128,6 @@ def spell_check():
             fo.write(inputtext)      
         output = (check_output(["./a.out", "words.txt", "wordlist.txt"], universal_newlines=True))
         misspelled = output.replace("\n", ", ").strip().strip(',')
-    response = make_response(render_template('spell_check.html', form=form, textout=texout, misspelled=misspelled))
+    response = make_response(render_template('spell_check.html', form=form, textout=textout, misspelled=misspelled))
     response.headers['Content-Security-Policy'] = "default-src 'self'"
     return response
