@@ -12,6 +12,10 @@
 				{{ render_field(form.misspelled, id="misspelled") }}
 			</dl>
 			<p><input type=submit value=Check></p>
+			{% if textout %}
+			<p id="textout">{{ textout }}</p>
+			{% if misspelled %}
+			<p id="misspelled">{{ misspelled }}</p>
 		</form>
 	
 </body>
