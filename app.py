@@ -70,7 +70,6 @@ def request_loader(request):
 
 
 @app.route('/')
-
 @app.route('/index')
 def mainpage(user=None):
     user = user
@@ -87,10 +86,10 @@ def register():
         mfa = form.mfa.data
         if uname in Users:
             form.uname.data = 'user already exists'
-            form.success.data = 'failure'
-            return render_template('register.html', form=form)
+            success = 'failure'
+            return render_template('register.html', form=form, success=success)
         Users[uname] = {'password': pword, 'mfa': mfa}
-        success = 'success'
+        success = "success"
     return render_template('register.html', form=form, success=success)
 
 @app.route('/login', methods=['GET', 'POST'])
