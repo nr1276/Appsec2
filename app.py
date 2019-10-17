@@ -88,8 +88,8 @@ def register():
             form.success.data = 'failure'
             return render_template('register.html', form=form)
         Users[uname] = {'password': pword, 'mfa': mfa}
-        form.success.data = 'success'
-    return render_template('register.html', form=form)
+        success = 'success'
+    return render_template('register.html', form=form, success=success)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -102,8 +102,8 @@ def login():
            form.result.data = "incorrect"
            return render_template('login.html', form=form)
        if (not sha256_crypt.verify(pword, Users[uname]['password'])):
-           form.result.data = "incorrect"
-           return render_template('login.html', form=form)
+           result = "incorrect"
+           return render_template('login.html', form=form, result=result)
        if (mfa != Users[uname]['mfa']):
            form.result.data = "Two-factor failure"
            return render_template('login.html', form=form) 
@@ -119,11 +119,11 @@ def spell_check():
     form = SpellCheckForm(request.form)
     if request.method == 'POST':
         inputtext = form.inputtext.data
-        form.textout.data = inputtext
+        textout = inputtext
         with open("words.txt", "w") as fo:
             fo.write(inputtext)      
         output = (check_output(["./a.out", "words.txt", "wordlist.txt"], universal_newlines=True))
-        form.misspelled.data = output.replace("\n", ", ").strip().strip(',')
-    response = make_response(render_template('spell_check.html', form=form))
+        misspelled = output.replace("\n", ", ").strip().strip(',')
+    response = make_response(render_template('spell_check.html', form=form, textout=texout, misspelled=misspelled))
     response.headers['Content-Security-Policy'] = "default-src 'self'"
     return response
