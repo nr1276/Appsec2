@@ -45,7 +45,7 @@ app.config['SECRET_KEY'] = 'super secret key'
 #Login Manager
 login_manager.init_app(app)
 #CSRF Protect
-
+csrf.init_app(app)
 
 
 class User(flask_login.UserMixin):
