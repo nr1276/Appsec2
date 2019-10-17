@@ -12,7 +12,6 @@ from flask_wtf import FlaskForm
 #User Variable to store entries
 Users = { }
 
-
 login_manager = flask_login.LoginManager()
 
 
@@ -44,7 +43,8 @@ app.config['SECRET_KEY'] = 'super secret key'
 #Login Manager
 login_manager.init_app(app)
 #CSRF Protect
-csrf = CSRFProtect(app)
+csrf = CSRFProtect()
+csrf.init_app(app)
 
 
 class User(flask_login.UserMixin):
