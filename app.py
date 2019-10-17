@@ -43,8 +43,8 @@ app.config['SECRET_KEY'] = 'super secret key'
 #Login Manager
 login_manager.init_app(app)
 #CSRF Protect
-csrf = CSRFProtect()
-csrf.init_app(app)
+#csrf = CSRFProtect()
+#csrf.init_app(app)
 
 
 class User(flask_login.UserMixin):
@@ -89,7 +89,7 @@ def register():
             return render_template('register.html', form=form, success=success)
         Users[uname] = {'password': pword, 'mfa': mfa}
         success = "success"
-    return render_template('register.html', form=form, success=success, csrf_token)
+    return render_template('register.html', form=form, success=success)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -112,7 +112,7 @@ def login():
        user.id = uname
        flask_login.login_user(user)
        result = "success"
-    return render_template('login.html', form=form, result=result, csrf_token)
+    return render_template('login.html', form=form, result=result)
            
 @app.route('/spell_check', methods=['GET', 'POST'])
 @login_required
