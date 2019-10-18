@@ -45,8 +45,8 @@ app.config['WTF_CSRF_ENABLED'] = False
 #Login Manager
 login_manager.init_app(app)
 #CSRF Protect
-#csrf = CSRFProtect()
-#csrf.init_app(app)
+csrf = CSRFProtect()
+csrf.init_app(app)
 
 
 class User(flask_login.UserMixin):
