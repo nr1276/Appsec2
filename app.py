@@ -16,7 +16,7 @@ Users = { }
 login_manager = flask_login.LoginManager()
 
 
-class RegistrationForm(Form):
+class RegistrationForm(FlaskForm):
     uname = StringField('Username', [validators.Length(min=4, max=25)])
     pword = PasswordField('New Password', [
             validators.DataRequired(),
@@ -25,13 +25,13 @@ class RegistrationForm(Form):
     mfa = StringField('mfa', [validators.DataRequired(), validators.Length(min=10, max=20)])
     success = StringField('result')
 
-class UserLoginForm(Form):
+class UserLoginForm(FlaskForm):
     uname = StringField('Username', [validators.DataRequired()])
     pword = PasswordField('Password', [validators.DataRequired()])
     mfa = StringField('mfa', [validators.DataRequired()])
     result = StringField('result')
 
-class SpellCheckForm(Form):
+class SpellCheckForm(FlaskForm):
     inputtext = StringField(u'inputtext', widget=TextArea())
     textout = StringField(u'textout', widget=TextArea())
     misspelled = StringField(u'misspelled', widget=TextArea())
@@ -40,13 +40,13 @@ class SpellCheckForm(Form):
 app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'memcached'
 app.config['SECRET_KEY'] = 'super secret key'
-app.config['WTF_CSRF_ENABLED'] = False
+#app.config['WTF_CSRF_ENABLED'] = False
 
 #Login Manager
 login_manager.init_app(app)
 #CSRF Protect
-csrf = CSRFProtect()
-csrf.init_app(app)
+#csrf = CSRFProtect()
+#csrf.init_app(app)
 
 
 class User(flask_login.UserMixin):
@@ -79,7 +79,7 @@ def mainpage(user=None):
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    form = RegistrationForm(request.form)
+    form = RegistrationForm()
     success = None
     if request.method ==  'POST' and form.validate():
         uname = form.uname.data
@@ -95,7 +95,7 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = UserLoginForm(request.form)
+    form = UserLoginForm()
     result = None
     if request.method == 'POST':
        uname = form.uname.data
@@ -119,7 +119,7 @@ def login():
 @app.route('/spell_check', methods=['GET', 'POST'])
 @login_required
 def spell_check():
-    form = SpellCheckForm(request.form)
+    form = SpellCheckForm()
     textout = None
     misspelled = None
     if request.method == 'POST':
