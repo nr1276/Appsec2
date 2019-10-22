@@ -33,14 +33,13 @@ class FeatureTest(unittest.TestCase):
         uname = 'tjramlogan'
         pword = "blahblah"
         mfa = "1234567891"
-        # Add register code
-        # check successful
+        self.post('/register', data=dict(uname=uname, pword=pword, mfa=mfa, follow_redirects=True)
         req = requests.get(server_address + "/login")
         self.assertEqual(req.status_code, 200)
+        self.post('/login', data=dict(uname=uname, pword=pword, mfa=mfa, follow_redirects=True)                  
         # login
         # check successful
         print("OK")
-
         req = requests.get(server_address + "/spell_check")
         self.assertEqual(req.status_code, 200)
 
