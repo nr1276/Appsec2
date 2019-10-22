@@ -12,9 +12,9 @@ class FeatureTest(unittest.TestCase):
         self.app = app.test_client()
         app.testing = True
 
-    def test_server_is_alive(self):
+    def test_register(self):
         req = requests.get(server_address + "/register")
-        self.assetrEqual(req.status_code, 200)
+        self.assertEqual(req.status_code, 200)
         print("OK")
 
     def test_login(self):
@@ -22,16 +22,9 @@ class FeatureTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         print("OK")
 
-    def test_page_exits(self):
-        PAGES = ["/register", "/login", "/spell_check"]
-        for page in PAGES:
-                req = requests.get(server_address + page)
-                self.assertEqual(req.status_code, 200)
-                print("OK")
-
     def test_no_login(self):
         req = requests.get(server_address + "/spell_check")
-        self.assertEqual(req.status_code, 400)
+        self.assertEqual(req.status_code, 401)
         print("OK")
 
     def test_spell_check(self):
