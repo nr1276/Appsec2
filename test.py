@@ -28,20 +28,39 @@ class FeatureTest(unittest.TestCase):
         print("OK")
 
     def test_spell_check(self):
-        req = requests.get(server_address + "/register")
+        
+        headers = {'User-Agent': 'My User Agent'}
+        s = requests.Session()
+        req = s.get(server_address + "/register")     
+        headers['cookie'] = '; '.join([x.name + '=' + x.value for x in req.cookies])
+        headers['content-type'] = 'application/x-www-form-urlencoded'
+        #print(req.content)
         self.assertEqual(req.status_code, 200)
         uname = 'tjramlogan'
         pword = "blahblah"
         mfa = "1234567891"
-        self.post('/register', data=dict(uname=uname, pword=pword, mfa=mfa, follow_redirects=True)
-        req = requests.get(server_address + "/login")
+        req = s.post(server_address + "/register", data=dict(
+            uname=uname, pword=pword, mfa=mfa), headers=headers
+        )
+        #print(req.content)
+        #assert b'success' in req.data
+        #self.assertEqual(req.status_code, 200)
+        req = s.get(server_address + "/login")
+        headers['cookie'] = '; '.join([x.name + '=' + x.value for x in req.cookies])
+        headers['content-type'] = 'application/x-www-form-urlencoded'
+        req = s.post(server_address + "/login", data=dict(
+            uname=uname, pword=pword, mfa=mfa), headers=headers
+        )                  
+        #print(req.content)
         self.assertEqual(req.status_code, 200)
-        self.post('/login', data=dict(uname=uname, pword=pword, mfa=mfa, follow_redirects=True)                  
-        # login
-        # check successful
-        print("OK")
-        req = requests.get(server_address + "/spell_check")
+        req = s.get(server_address + "/spell_check")
         self.assertEqual(req.status_code, 200)
+        inputtext = "one two chalfdae three four blakc-da"
+        req = s.post(server_address + "/spell_check", data=dict(
+            inputtext=inputtext)
+        )                  
+        print(req.content)
+
 
 
     def tearDown(self):
