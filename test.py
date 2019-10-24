@@ -60,6 +60,11 @@ class FeatureTest(unittest.TestCase):
             inputtext=inputtext)
         )                  
         print(req.content)
+        text = b'chalfdae, blakc-da'
+        if text in req.content:
+            print("OK Spelling")
+        else:
+            self.assertEqual(1, 0)
 
 
 
