@@ -1,6 +1,8 @@
 import unittest
 import requests
 from app import app
+from bs4 import BeautifulSoup
+import pytest
 
 server_address="http://127.0.0.1:5000"
 SERVICE_ADDR=server_address
@@ -58,13 +60,12 @@ class FeatureTest(unittest.TestCase):
         inputtext = "one two chalfdae three four blakc-da"
         req = s.post(server_address + "/spell_check", data=dict(
             inputtext=inputtext)
-        )                  
-        print(req.content)
-        text = b'chalfdae, blakc-da'
-        if text in req.content:
-            print("OK Spelling")
-        else:
-            self.assertEqual(1, 0)
+        )               
+        soup = BeautifulSoup(req.content, 'html.parser')
+        values = soup.find("p", {"id":"misspelled"})
+        text = 'chalfdae, blakc-da'
+        print(values.text)
+        self.assertEqual(text, values.text)
 
 
 
