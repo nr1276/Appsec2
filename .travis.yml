@@ -9,6 +9,7 @@ before_install: sudo apt-get update
 install:
  - sudo apt-get install python3-pip
  - sudo apt-get install python2.7
+ - sudo apt-get pytest
  - python3 -m pip install flask
  - pip install tox-travis
  - pip install -r requirements.txt
